@@ -90,6 +90,47 @@ async def verify(ctx):
             await member.edit(nick=txt)
             await member.remove_roles(temp)
 
+@client.command()
+async def check(ctx):
+    server = ctx.message.guild
+    channel = ctx.message.channel
+    user_id = ctx.author.id
+    member = ctx.author
+    print(type(member))
+    data = None
+    with open('data.txt') as fileread:
+        x = fileread.read()
+        data = ast.literal_eval(x)
+    fileread.close()
+    flag = False
+    for id in data.keys():
+        if id != user_id:
+            continue
+        flag = True
+    if flag:
+        nickname = data[user_id]
+        await member.edit(nick=nickname)
+        role = _get_role(server, 'member')
+        print(type(role))
+        await member.add_roles(role)
+    else:
+        try:
+            await channel.send("Please enter your name: (You have 60 seconds to complete the verification)")
+            msg = await client.wait_for("message", timeout=60)
+            txt = msg.content
+        except asyncio.TimeoutError:
+            await channel.send("Sorry You did not reply in time")
+            await channel.send("Please run the !verify command again")
+        data[user_id] = txt
+        wrt = str(data)
+        file = open('data.txt', 'w')
+        file.write(wrt)
+        file.close()
+        role = _get_role(server, 'member')
+        print(type(role))
+        await member.add_roles(role)
+        await member.edit(nick=txt)
+
 
 
 client.run("ODM2MzcwODYxNTQ4MTA5ODk0.YIdBEA.3jW1_FAMPFePnMvcj9eVaFU2d8U")
