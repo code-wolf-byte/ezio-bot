@@ -9,6 +9,12 @@ print(discord.__version__)
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='!', intents= intents)
 
+
+def _get_role(server, role_name: str) -> discord.Role:
+    for role in server.roles:
+        if role_name.lower() in role.name.lower():
+            return role
+    return None
 @client.event
 async def on_ready():
         print(f"[!] Initializing...")
@@ -59,10 +65,10 @@ async def verify(ctx):
         if flag:
             nickname = data[user_id]
             await member.edit(nick=nickname)
-            role = discord.utils.get(server.roles, name="members")
+            role = _get_role(server,'member')
             print(type(role))
             await member.add_roles(role)
-            temp = discord.utils.get(server.roles, name="non-verified")
+            temp = _get_role(server,'non-verified')
             await member.remove_roles(temp)
         else:
             try:
@@ -77,10 +83,10 @@ async def verify(ctx):
             file = open('data.txt', 'w')
             file.write(wrt)
             file.close()
-            role = discord.utils.get(server.roles, name="members")
+            role = _get_role(server,'member')
             print(type(role))
             await member.add_roles(role)
-            temp = discord.utils.get(server.roles, name="non-verified")
+            temp = _get_role(server,'non-verified')
             await member.edit(nick=txt)
             await member.remove_roles(temp)
 
