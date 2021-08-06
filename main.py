@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from main import Utilities
 import ast
 import asyncio
 
@@ -131,6 +130,7 @@ async def check(ctx):
         await member.add_roles(role)
         await member.edit(nick=txt)
 
+      
 
 
 client.run("ODM2MzcwODYxNTQ4MTA5ODk0.YIdBEA.3jW1_FAMPFePnMvcj9eVaFU2d8U")
