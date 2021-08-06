@@ -69,7 +69,8 @@ async def verify(ctx):
             await member.add_roles(role)
             temp = _get_role(server,'non-verified')
             await member.remove_roles(temp)
-            await member.send("Welcome to Neo-Tech")
+            channel = await member.create_dm()
+            await channel.send("Welcome to "+ server.name)
         else:
             try:
                 await channel.send("Please enter your name: (You have 60 seconds to complete the verification)")
@@ -87,7 +88,8 @@ async def verify(ctx):
             print(type(role))
             await member.add_roles(role)
             temp = _get_role(server,'non-verified')
-            await member.send("Welcome to Neo-Tech")
+            channel = await member.create_dm()
+            await channel.send("Welcome to "+ server.name)
             await member.edit(nick=txt)
             await member.remove_roles(temp)
 
