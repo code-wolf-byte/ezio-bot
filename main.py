@@ -34,15 +34,7 @@ async def members(ctx):
               print(type(role))
               await membes.add_roles(role)
 
-@client.command()
-async def clear(ctx):
-    auth = ctx.author
-    guild = ctx.message.guild
-    channel_name = ctx.channel.name
-    existing_channel = discord.utils.get(ctx.message.guild.channels, name=channel_name)
-    if existing_channel is not None:
-        await  existing_channel.clone()
-        await existing_channel.delete()
+
 
 @client.command()
 async def verify(ctx):
@@ -93,46 +85,6 @@ async def verify(ctx):
             await member.edit(nick=txt)
             await member.remove_roles(temp)
 
-@client.command()
-async def check(ctx):
-    server = ctx.message.guild
-    channel = ctx.message.channel
-    user_id = ctx.author.id
-    member = ctx.author
-    print(type(member))
-    data = None
-    with open('data.txt') as fileread:
-        x = fileread.read()
-        data = ast.literal_eval(x)
-    fileread.close()
-    flag = False
-    for id in data.keys():
-        if id != user_id:
-            continue
-        flag = True
-    if flag:
-        nickname = data[user_id]
-        await member.edit(nick=nickname)
-        role = _get_role(server, 'member')
-        print(type(role))
-        await member.add_roles(role)
-    else:
-        try:
-            await channel.send("Please enter your name: (You have 60 seconds to complete the verification)")
-            msg = await client.wait_for("message", timeout=60)
-            txt = msg.content
-        except asyncio.TimeoutError:
-            await channel.send("Sorry You did not reply in time")
-            await channel.send("Please run the !verify command again")
-        data[user_id] = txt
-        wrt = str(data)
-        file = open('data.txt', 'w')
-        file.write(wrt)
-        file.close()
-        role = _get_role(server, 'member')
-        print(type(role))
-        await member.add_roles(role)
-        await member.edit(nick=txt)
 
       
 
